@@ -10,6 +10,6 @@ router.post('/', content('application/json'), register)
 router.post('/login', content('application/json'), login)
 router.delete('/logout', auth, logout)
 router.post('/extend', auth, extend)
-router.get('/me', getUserInfo)
+router.get('/me', auth, getUserInfo)
 
 export default router
