@@ -26,7 +26,9 @@ const userSchema = new mongoose.Schema({
     }
   },
   userName: {
-    type: String
+    type: String,
+    minlength: [1, '名稱最少2個字'],
+    maxlength: [20, '名稱最多20個字']
   },
   tokens: {
     type: [String]
@@ -40,51 +42,63 @@ const userSchema = new mongoose.Schema({
   description: {
     type: String
   },
+  // user上傳的音樂
   tracks: {
     type: [{
       track: {
         type: mongoose.ObjectId,
-        ref: 'tracks'
+        ref: 'tracks',
+        required: [true, '缺少音樂ID']
       }
     }]
   },
+  // user儲存的活動
   events: {
     type: [{
       event: {
         type: mongoose.ObjectId,
-        ref: 'events'
+        ref: 'events',
+        required: [true, '缺少活動ID']
       }
     }]
   },
+  // user喜歡的音樂
   likes: {
     type: [{
-      user: {
+      music: {
         type: mongoose.ObjectId,
-        ref: 'users'
+        ref: 'tracks',
+        required: [true, '缺少音樂ID']
       }
     }]
   },
+  // user建立的歌單
   playlists: {
     type: [{
-      playlist: {
+      playlists: {
         type: mongoose.ObjectId,
-        ref: 'playlists'
+        ref: 'playlists',
+        required: [true, '缺少歌單ID']
       }
     }]
   },
+  // user追蹤的人
   following: {
     type: [{
-      user: {
+      users: {
         type: mongoose.ObjectId,
-        ref: 'users'
+        ref: 'users',
+        required: [true, '缺少追蹤者ID']
       }
     }]
   },
+  // user粉絲
   followers: {
     type: [{
-      user: {
+      users: {
         type: mongoose.ObjectId,
-        ref: 'users'
+        ref: 'users',
+        required: [true, '缺少粉絲ID']
       }
     }]
   },
