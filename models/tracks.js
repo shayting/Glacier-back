@@ -5,6 +5,11 @@ const trackSchema = new mongoose.Schema({
     type: String,
     required: [true, '歌名不得為空']
   },
+  private: {
+    type: Boolean,
+    default: false,
+    required: [true, '音樂狀態不可為空']
+  },
   type: {
     type: String,
     enum: ['Rock', 'Hip hop / Rap', 'Electronic', 'Pop', 'Folk', 'Alternative', 'Post rock', 'Metal', 'Punk', 'Reggae / Funk', 'R&B / Soul', 'Classic', 'Blues', 'Jazz'],
