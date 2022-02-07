@@ -13,6 +13,16 @@ export const create = async (req, res) => {
   }
 }
 
+// 所有公開的音樂
+export const getTracks = async (req, res) => {
+  try {
+    const result = await tracks.find({ private: false })
+    res.status(200).send({ success: true, message: '', result })
+  } catch (error) {
+    res.status(500).send({ success: false, message: '伺服器錯誤' })
+  }
+}
+
 export const getAllTracks = async (req, res) => {
   try {
     const result = await tracks.find()
@@ -31,6 +41,7 @@ export const getTrackById = async (req, res) => {
       res.status(404).send({ success: false, message: '找不到' })
     }
   } catch (error) {
+    // id格式錯誤
     if (error.name === 'CastError') {
       res.status(404).send({ success: false, message: '找不到' })
     }

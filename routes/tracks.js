@@ -7,12 +7,14 @@ import admin from '../middleware/admin.js'
 
 import {
   create,
+  getTracks,
   getAllTracks,
   getTrackById
 } from '../controllers/tracks.js'
 const router = express.Router()
 
 router.post('/', auth, content('multipart/form-data'), upload, create)
+router.get('/', getTracks)
 router.get('/all', auth, admin, getAllTracks)
 router.get('/:id', getTrackById)
 
