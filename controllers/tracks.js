@@ -1,11 +1,18 @@
 import tracks from '../models/tracks.js'
 export const create = async (req, res) => {
   try {
-    console.log(req.files)
-    const result = await tracks.create({ ...req.body, cover: req.files.cover[0].path, file: req.files.file[0].path })
+    console.log(req)
+    const result = await tracks.create({
+      ...req.body,
+      cover: req.files.cover[0].path,
+      file: req.files.file[0].path,
+      artist: req.user._id
+    })
+    req.user.tracks.push({ track: result._id })
+    await req.user.save({ validateBeforeSave: false })
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
-    console.log(error)
+    // console.log(error)
     if (error.name === 'ValidationError') {
       const key = Object.keys(error.errors)[0]
       res.status(400).send({ success: false, message: error.errors[key].message })
