@@ -21,17 +21,17 @@ const upload = multer({
     cloudinary,
     params: {
       resource_type (req, file) {
-        return file.fieldname === 'image' ? 'image' : 'video'
+        return file.fieldname === 'cover' ? 'image' : 'video'
       }
     }
   }),
   // 過濾檔案類型，因為內建的limits 沒有所以要自己寫
   fileFilter (req, file, callback) {
     // 檢查檔案是不是圖片 mimetype:網路媒體形式
-    if (file.fieldname === 'audio' && !file.mimetype.includes('audio')) {
+    if (file.fieldname === 'file' && !file.mimetype.includes('audio')) {
       // 觸發自訂的 LIMIT_FORMAT 錯誤
       callback(new multer.MulterError('LIMIT_FILE_FORMAT'), false)
-    } else if (file.fieldname === 'image' && !file.mimetype.includes('image')) {
+    } else if (file.fieldname === 'cover' && !file.mimetype.includes('image')) {
       // 觸發自訂的 LIMIT_FORMAT 錯誤
       callback(new multer.MulterError('LIMIT_FILE_FORMAT'), false)
     } else {
@@ -40,33 +40,31 @@ const upload = multer({
   },
   // 限制條件參照 npm multer
   limits: {
-    // 限制檔案 1MB
+    // 限制檔案 5MB
     // fileSize單位是 byte
     fileSize: 1024 * 1024 * 5
   }
 })
 
-export default (type) => {
+export default async (req, res, next) => {
   // 設定只能上傳單檔案 (也有上傳多檔案的寫法)
   // single('值對應到form-data key')
-  return async (req, res, next) => {
-    upload.single(type)(req, res, async (error) => {
-      // 檢查是不是上傳錯誤
-      console.log(error)
-      if (error instanceof multer.MulterError) {
-        let message = '上傳錯誤'
-        if (error.code === 'LIMIT_FILE_SIZE') {
-          message = '檔案太大'
-        } else if (error.code === 'LIMIT_FILE_FORMAT') {
-          message = '格式不符!'
-        }
-        res.status(400).send({ success: false, message })
-      } else if (error) {
-        res.status(500).send({ success: false, message: '伺服器錯誤' })
-      } else {
-        console.log(req.file)
-        next()
+  upload.fields([{ name: 'cover', maxCount: 1 }, { name: 'file', maxCount: 1 }])(req, res, async (error) => {
+    // 檢查是不是上傳錯誤
+    console.log(error)
+    if (error instanceof multer.MulterError) {
+      let message = '上傳錯誤'
+      if (error.code === 'LIMIT_FILE_SIZE') {
+        message = '檔案太大'
+      } else if (error.code === 'LIMIT_FILE_FORMAT') {
+        message = '格式不符!'
       }
-    })
-  }
+      res.status(400).send({ success: false, message })
+    } else if (error) {
+      res.status(500).send({ success: false, message: '伺服器錯誤' })
+    } else {
+      console.log(req.file)
+      next()
+    }
+  })
 }

@@ -1,9 +1,11 @@
-import tracks from '../models/tracks'
+import tracks from '../models/tracks.js'
 export const create = async (req, res) => {
   try {
-    const result = await tracks.create({ ...req.body, cover: req.file.path })
+    console.log(req.files)
+    const result = await tracks.create({ ...req.body, cover: req.files.cover[0].path, file: req.files.file[0].path })
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
+    console.log(error)
     if (error.name === 'ValidationError') {
       const key = Object.keys(error.errors)[0]
       res.status(400).send({ success: false, message: error.errors[key].message })

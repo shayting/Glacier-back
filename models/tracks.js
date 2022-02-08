@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from 'mongoose'
+import mongoose from 'mongoose'
 
 const trackSchema = new mongoose.Schema({
   title: {
@@ -16,7 +16,7 @@ const trackSchema = new mongoose.Schema({
     required: [true, '缺少音樂類型']
   },
   artist: {
-    type: Mongoose.ObjectId,
+    type: mongoose.ObjectId,
     ref: 'users',
     required: [true, '缺少作者ID']
   },
@@ -27,16 +27,18 @@ const trackSchema = new mongoose.Schema({
     type: String
   },
   cover: {
-    type: String
+    type: String,
+    required: [true, '缺少音樂封面']
   },
   playsCount: {
-    type: Number
+    type: Number,
+    default: 0
   },
   likes: {
     type: [
       {
         users: {
-          type: Mongoose.ObjectId,
+          type: mongoose.ObjectId,
           ref: 'users',
           required: [true, '缺少按讚人ID']
         }
@@ -55,7 +57,7 @@ const trackSchema = new mongoose.Schema({
     type: [
       {
         users: {
-          type: Mongoose.ObjectId,
+          type: mongoose.ObjectId,
           ref: 'users',
           required: [true, '缺少留言者ID']
         },
