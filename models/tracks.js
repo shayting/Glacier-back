@@ -7,7 +7,6 @@ const trackSchema = new mongoose.Schema({
   },
   private: {
     type: Boolean,
-    default: false,
     required: [true, '音樂狀態不可為空']
   },
   type: {

@@ -25,7 +25,7 @@ export const create = async (req, res) => {
 // 所有公開的音樂
 export const getTracks = async (req, res) => {
   try {
-    const result = await tracks.find({ private: false })
+    const result = await tracks.find({})
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     res.status(500).send({ success: false, message: '伺服器錯誤' })
