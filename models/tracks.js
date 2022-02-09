@@ -26,8 +26,8 @@ const trackSchema = new mongoose.Schema({
     type: String
   },
   cover: {
-    type: String,
-    required: [true, '缺少音樂封面']
+    type: String
+    // required: [true, '缺少音樂封面']
   },
   playsCount: {
     type: Number,
@@ -49,8 +49,8 @@ const trackSchema = new mongoose.Schema({
     default: Date.now
   },
   file: {
-    type: String,
-    required: [true, '缺少音樂檔案']
+    type: String
+    // required: [true, '缺少音樂檔案']
   },
   comments: {
     type: [
