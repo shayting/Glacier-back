@@ -94,3 +94,16 @@ export const editUserById = async (req, res) => {
     }
   }
 }
+
+export const getAllUsers = async (req, res) => {
+  if (req.user.role !== 1) {
+    res.status(403).send({ success: false, message: '沒有權限' })
+  }
+  try {
+    const result = await users.find()
+    res.status(200).send({ success: true, message: '', result })
+  } catch (error) {
+    console.log(error)
+    res.status(500).send({ success: false, message: '伺服器錯誤' })
+  }
+}
