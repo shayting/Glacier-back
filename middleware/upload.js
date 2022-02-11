@@ -51,7 +51,6 @@ export default async (req, res, next) => {
   // single('值對應到form-data key')
   upload.fields([{ name: 'cover', maxCount: 1 }, { name: 'file', maxCount: 1 }])(req, res, async (error) => {
     // 檢查是不是上傳錯誤
-    console.log(error)
     if (error instanceof multer.MulterError) {
       let message = '上傳錯誤'
       if (error.code === 'LIMIT_FILE_SIZE') {
@@ -63,7 +62,6 @@ export default async (req, res, next) => {
     } else if (error) {
       res.status(500).send({ success: false, message: '伺服器錯誤' })
     } else {
-      console.log(req.file)
       next()
     }
   })

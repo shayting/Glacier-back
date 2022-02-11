@@ -27,7 +27,6 @@ const trackSchema = new mongoose.Schema({
   },
   cover: {
     type: String
-    // required: [true, '缺少音樂封面']
   },
   playsCount: {
     type: Number,

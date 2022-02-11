@@ -65,11 +65,13 @@ export const updateTrackById = async (req, res) => {
     description: req.body.description,
     lyric: req.body.lyric
   }
-
-  if (req.files) {
+  console.log(req.files)
+  // 如果沒傳檔案會回傳{} 還是會呈現 true 這樣判斷會錯誤，所以改成判斷是不是{}
+  if (JSON.stringify(req.files) !== '{}') {
     data.cover = req.files.cover[0].path
     data.file = req.files.file[0].path
   }
+  console.log(data)
   try {
     const result = await tracks.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true })
     res.status(200).send({ success: true, message: '', result })
