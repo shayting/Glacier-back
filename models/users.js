@@ -28,16 +28,19 @@ const userSchema = new mongoose.Schema({
   userName: {
     type: String,
     minlength: [1, '名稱最少2個字'],
-    maxlength: [20, '名稱最多20個字']
+    maxlength: [20, '名稱最多20個字'],
+    default: '預設'
   },
   tokens: {
     type: [String]
   },
   avatar: {
-    type: String
+    type: String,
+    default: null
   },
   description: {
-    type: String
+    type: String,
+    default: ''
   },
   // user上傳的音樂
   tracks: {
