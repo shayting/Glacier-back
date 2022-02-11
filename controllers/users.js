@@ -61,6 +61,7 @@ export const extend = async (req, res) => {
   }
 }
 
+// 取得個人資料
 export const getUserInfo = (req, res) => {
   try {
     const result = req.user.toObject()
@@ -71,6 +72,7 @@ export const getUserInfo = (req, res) => {
   }
 }
 
+// 使用者編輯自己的資訊
 export const editUserById = async (req, res) => {
   console.log(req.body)
   const data = {
@@ -95,6 +97,7 @@ export const editUserById = async (req, res) => {
   }
 }
 
+// 管理員取得所有會員資料
 export const getAllUsers = async (req, res) => {
   if (req.user.role !== 1) {
     res.status(403).send({ success: false, message: '沒有權限' })
@@ -105,5 +108,30 @@ export const getAllUsers = async (req, res) => {
   } catch (error) {
     console.log(error)
     res.status(500).send({ success: false, message: '伺服器錯誤' })
+  }
+}
+
+// 管理員修改使用者資料
+export const editUsers = async (req, res) => {
+  if (req.user.role !== 1) {
+    res.status(403).send({ success: false, message: '沒有權限' })
+  }
+  try {
+    const data = {
+      account: req.body.account,
+      email: req.body.email,
+      userName: req.body.userName,
+      active: req.body.active
+    }
+    const result = await users.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true })
+    res.status(200).send({ success: true, message: '', result })
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const key = Object.keys(error.errors)[0]
+      const message = error.errors[key].message
+      res.status(400).send({ success: false, message: message })
+    } else {
+      res.status(500).send({ success: false, message: '伺服器錯誤' })
+    }
   }
 }

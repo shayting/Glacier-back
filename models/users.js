@@ -27,9 +27,9 @@ const userSchema = new mongoose.Schema({
   },
   userName: {
     type: String,
-    minlength: [1, '名稱最少2個字'],
+    // minlength: [1, '名稱最少1個字'],
     maxlength: [20, '名稱最多20個字'],
-    default: '預設'
+    default: ''
   },
   tokens: {
     type: [String]
@@ -106,6 +106,10 @@ const userSchema = new mongoose.Schema({
     // 0 會員 1 管理員
     type: Number,
     default: 0
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
 }, { versionKey: false })
 
