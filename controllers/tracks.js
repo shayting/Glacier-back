@@ -98,3 +98,24 @@ export const deleteTrack = async (req, res) => {
     }
   }
 }
+
+export const editTracks = async (req, res) => {
+  if (req.user.role !== 1) {
+    res.status(403).send({ success: false, message: '沒有權限' })
+  }
+  try {
+    const data = {
+      private: req.body.private
+    }
+    const result = await tracks.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true })
+    res.status(200).send({ success: true, message: '', result })
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const key = Object.keys(error.errors)[0]
+      const message = error.errors[key].message
+      res.status(400).send({ success: false, message: message })
+    } else {
+      res.status(500).send({ success: false, message: '伺服器錯誤' })
+    }
+  }
+}

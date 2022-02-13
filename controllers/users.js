@@ -74,12 +74,10 @@ export const getUserInfo = (req, res) => {
 
 // 使用者編輯自己的資訊
 export const editUserById = async (req, res) => {
-  console.log(req.body)
   const data = {
     userName: req.body.userName,
     description: req.body.description
   }
-  console.log(req.file)
   if (JSON.stringify(req.files) !== '{}') {
     data.avatar = req.files.cover[0].path
   }
@@ -133,5 +131,30 @@ export const editUsers = async (req, res) => {
     } else {
       res.status(500).send({ success: false, message: '伺服器錯誤' })
     }
+  }
+}
+
+// 一般使用者取得他人資料
+export const getUserById = async (req, res) => {
+  try {
+    const result = await users.findById(req.params.id)
+    res.status(200).send({ success: true, message: '', result })
+  } catch (error) {
+    console.log(error)
+    if (error.name === 'CastError') {
+      res.status(400).send({ success: false, message: '查無使用者' })
+    }
+    res.status(500).send({ success: false, message: '伺服器錯誤' })
+  }
+}
+
+// 取得user tracks
+export const getUserTracks = async (req, res) => {
+  try {
+    const { tracks } = await users.findById(req.params.id, 'tracks').populate('tracks.track')
+    res.status(200).send({ success: true, message: '', result: tracks })
+  } catch (error) {
+    console.log('getUserTracks錯誤')
+    res.status(500).send({ sucess: false, message: '伺服器錯誤' })
   }
 }
