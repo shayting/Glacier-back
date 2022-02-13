@@ -42,7 +42,7 @@ export const getAllTracks = async (req, res) => {
 
 export const getTrackById = async (req, res) => {
   try {
-    const result = await tracks.findById(req.params.id)
+    const result = await tracks.findById(req.params.id).populate('artist', 'userName avatar')
     if (result) {
       res.status(200).send({ success: true, message: '', result })
     } else {
