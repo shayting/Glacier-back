@@ -12,12 +12,14 @@ import {
   getTrackById,
   updateTrackById,
   deleteTrack,
-  editTracks
+  editTracks,
+  getPrivate
 } from '../controllers/tracks.js'
 const router = express.Router()
 
 router.post('/', auth, content('multipart/form-data'), upload, create)
 router.get('/', getTracks)
+router.get('/private/:id', auth, getPrivate)
 router.get('/all', auth, admin, getAllTracks)
 router.get('/:id', getTrackById)
 router.patch('/:id', auth, content('multipart/form-data'), upload, updateTrackById)

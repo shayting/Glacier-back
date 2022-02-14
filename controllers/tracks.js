@@ -21,16 +21,27 @@ export const create = async (req, res) => {
   }
 }
 
-// 所有公開的音樂
+// 未登入使用者抓指定人公開的
 export const getTracks = async (req, res) => {
   try {
-    const result = await tracks.find({})
+    const result = await tracks.find({ artist: req.query.artist, private: false })
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     res.status(500).send({ success: false, message: '伺服器錯誤' })
   }
 }
 
+// 使用者取自己所有的音樂
+export const getPrivate = async (req, res) => {
+  try {
+    const result = await tracks.find({ artist: req.user.id })
+    res.status(200).send({ success: true, message: '', result })
+  } catch (error) {
+    res.status(500).send({ success: false, message: '伺服器錯誤' })
+  }
+}
+
+// 管理員取得所有音樂(包含不公開) 或個人的所有音樂
 export const getAllTracks = async (req, res) => {
   try {
     const result = await tracks.find()
@@ -40,6 +51,7 @@ export const getAllTracks = async (req, res) => {
   }
 }
 
+// 用track id 取 track 資料
 export const getTrackById = async (req, res) => {
   try {
     const result = await tracks.findById(req.params.id).populate('artist', 'userName avatar')
@@ -71,7 +83,6 @@ export const updateTrackById = async (req, res) => {
     data.cover = req.files.cover[0].path
     data.file = req.files.file[0].path
   }
-  console.log(data)
   try {
     const result = await tracks.findByIdAndUpdate(req.params.id, data, { new: true, runValidators: true })
     res.status(200).send({ success: true, message: '', result })
