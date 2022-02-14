@@ -170,8 +170,6 @@ export const like = async (req, res) => {
     const track = await tracks.findById(req.body._id, 'likes')
     // 判斷此人按讚的陣列裡是否已包含傳出的這首歌id
     const data = user.likes.map(l => l.tracks).toString().includes(req.body._id)
-    console.log(data)
-    console.log(req.body._id)
     // 如果user likes陣列裡已經有這個track id 就移除
     if (data === true) {
       await users.findByIdAndUpdate(
