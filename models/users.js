@@ -65,7 +65,7 @@ const userSchema = new mongoose.Schema({
   // user喜歡的音樂
   likes: {
     type: [{
-      music: {
+      tracks: {
         type: mongoose.ObjectId,
         ref: 'tracks',
         required: [true, '缺少音樂ID']

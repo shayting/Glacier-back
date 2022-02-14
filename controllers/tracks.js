@@ -54,7 +54,7 @@ export const getAllTracks = async (req, res) => {
 // 用track id 取 track 資料
 export const getTrackById = async (req, res) => {
   try {
-    const result = await tracks.findById(req.params.id).populate('artist', 'userName avatar')
+    const result = await tracks.findById(req.params.id).populate('artist', 'userName avatar account')
     if (result) {
       res.status(200).send({ success: true, message: '', result })
     } else {

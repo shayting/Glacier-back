@@ -1,5 +1,6 @@
 import md5 from 'md5'
 import users from '../models/users.js'
+import tracks from '../models/tracks.js'
 import jwt from 'jsonwebtoken'
 
 export const register = async (req, res) => {
@@ -156,5 +157,63 @@ export const getUserTracks = async (req, res) => {
   } catch (error) {
     console.log('getUserTracks錯誤')
     res.status(500).send({ sucess: false, message: '伺服器錯誤' })
+  }
+}
+
+// 喜歡
+export const like = async (req, res) => {
+  try {
+    // 檢查是不是已經喜歡
+    // 儲存了此人按讚的所有歌曲id
+    const user = await users.findById(req.user.id, 'likes')
+    // 儲存了這首歌曲所有按讚人id
+    const track = await tracks.findById(req.body._id, 'likes')
+    // 判斷此人按讚的陣列裡是否已包含傳出的這首歌id
+    const data = user.likes.map(l => l.tracks).toString().includes(req.body._id)
+    console.log(data)
+    console.log(req.body._id)
+    // 如果user likes陣列裡已經有這個track id 就移除
+    if (data === true) {
+      await users.findByIdAndUpdate(
+        req.user.id,
+        {
+          // 刪除陣列元素
+          $pull: {
+            // 欄位名稱
+            likes: {
+              // 刪除條件
+              tracks: req.body._id
+            }
+          }
+        }
+      )
+      await tracks.findByIdAndUpdate(
+        req.body._id,
+        {
+          $pull: {
+            likes: {
+              users: req.user.id
+            }
+          }
+        }
+      )
+      res.status(200).send({ success: true, message: '取消喜歡' })
+    } else {
+      // 尚未喜歡 就將歌曲push到user likes 並將此人的id 也push進trash likes 中
+      user.likes.push({ tracks: req.body._id })
+      track.likes.push({ users: req.user.id })
+      user.save({ validateBeforeSave: false })
+      track.save({ validateBeforeSave: false })
+      res.status(200).send({ success: true, message: '加入喜歡' })
+    }
+  } catch (error) {
+    console.log(error)
+    if (error.name === 'ValidationError') {
+      const key = Object.keys(error.errors)[0]
+      const message = error.errors[key].message
+      res.status(400).send({ success: false, message: message })
+    } else {
+      res.status(500).send({ success: false, message: '伺服器錯誤' })
+    }
   }
 }
