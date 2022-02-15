@@ -13,7 +13,8 @@ import {
   updateTrackById,
   deleteTrack,
   editTracks,
-  getPrivate
+  getPrivate,
+  postComment
 } from '../controllers/tracks.js'
 const router = express.Router()
 
@@ -25,6 +26,7 @@ router.get('/:id', getTrackById)
 router.patch('/:id', auth, content('multipart/form-data'), upload, updateTrackById)
 // 管理員修改使用者資料
 router.patch('/admin/:id', auth, editTracks)
+router.patch('/comment/:id', auth, content('application/json'), postComment)
 router.delete('/:id', auth, deleteTrack)
 
 export default router

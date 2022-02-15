@@ -133,3 +133,29 @@ export const editTracks = async (req, res) => {
     }
   }
 }
+
+// 留言板
+export const postComment = async (req, res) => {
+  if (!req.user.id) {
+    res.status(403).send({ success: false, message: '請登入後再進行操作' })
+  }
+  try {
+    const track = await tracks.findById(req.params.id)
+    const data = {
+      users: req.body._id,
+      content: req.body.content,
+      date: Date.now()
+    }
+    track.comments.push(data)
+    await track.save({ validateBeforeSave: false })
+    res.status(200).send({ success: true, meesage: '留言成功' })
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      const key = Object.keys(error.errors)[0]
+      const message = error.errors[key].message
+      res.status(400).send({ success: false, message: message })
+    } else {
+      res.status(500).send({ success: false, message: '伺服器錯誤' })
+    }
+  }
+}

@@ -62,7 +62,7 @@ export const extend = async (req, res) => {
   }
 }
 
-// 取得個人資料
+// 取得自己資料
 export const getUserInfo = (req, res) => {
   try {
     const result = req.user.toObject()
@@ -164,7 +164,6 @@ export const getUserTracks = async (req, res) => {
 export const getUserFollow = async (req, res) => {
   try {
     const result = await users.findById(req.params.id, 'followers following').populate('followers.users').populate('following.users')
-    console.log(result)
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     console.log('getUserFollow錯誤')

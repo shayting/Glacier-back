@@ -28,7 +28,7 @@ router.get('/:id/follow', getUserFollow)
 // 使用者修改喜歡
 router.patch('/likes/:id', auth, content('application/json'), like)
 // 使用者改追蹤狀態
-router.patch('/follow/:id', auth, follow)
+router.patch('/follow/:id', auth, content('application/json'), follow)
 // 修改使用者資料
 router.patch('/:id', auth, content('multipart/form-data'), upload, editUserById)
 // 管理員修改使用者資料
