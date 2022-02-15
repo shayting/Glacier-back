@@ -3,7 +3,7 @@ import express from 'express'
 import content from '../middleware/content.js'
 import auth from '../middleware/auth.js'
 import upload from '../middleware/upload.js'
-import { register, login, logout, extend, getUserInfo, editUserById, getAllUsers, editUsers, getUserById, getUserTracks, like } from '../controllers/users.js'
+import { register, login, logout, extend, getUserInfo, editUserById, getAllUsers, editUsers, getUserById, getUserTracks, like, follow, getUserFollow } from '../controllers/users.js'
 
 const router = express.Router()
 
@@ -23,8 +23,12 @@ router.get('/all', auth, getAllUsers)
 router.get('/:id', getUserById)
 // 取得個別user tracks
 router.get('/:id/tracks', getUserTracks)
+// 取得個別的user follow
+router.get('/:id/follow', getUserFollow)
 // 使用者修改喜歡
-router.patch('/likes/:id', auth, like)
+router.patch('/likes/:id', auth, content('application/json'), like)
+// 使用者改追蹤狀態
+router.patch('/follow/:id', auth, follow)
 // 修改使用者資料
 router.patch('/:id', auth, content('multipart/form-data'), upload, editUserById)
 // 管理員修改使用者資料

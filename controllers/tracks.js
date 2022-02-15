@@ -51,7 +51,7 @@ export const getAllTracks = async (req, res) => {
   }
 }
 
-// 用track id 取 track 資料
+// 用track id 取 track 持有人資料
 export const getTrackById = async (req, res) => {
   try {
     const result = await tracks.findById(req.params.id).populate('artist', 'userName avatar account')
@@ -69,6 +69,7 @@ export const getTrackById = async (req, res) => {
   }
 }
 
+// 更改音樂資料
 export const updateTrackById = async (req, res) => {
   const data = {
     title: req.body.title,
@@ -96,6 +97,7 @@ export const updateTrackById = async (req, res) => {
   }
 }
 
+// 刪除track
 export const deleteTrack = async (req, res) => {
   try {
     await tracks.findByIdAndDelete(req.params.id)
@@ -110,6 +112,7 @@ export const deleteTrack = async (req, res) => {
   }
 }
 
+// 管理員修改tracks資料
 export const editTracks = async (req, res) => {
   if (req.user.role !== 1) {
     res.status(403).send({ success: false, message: '沒有權限' })
