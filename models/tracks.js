@@ -62,6 +62,7 @@ const trackSchema = new mongoose.Schema({
         message: {
           type: String,
           maxlength: [100, '留言最多100字'],
+          minlength: [1, '沒有留言內容'],
           required: [true, '缺少留言內容']
         },
         date: {

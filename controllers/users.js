@@ -232,72 +232,41 @@ export const follow = async (req, res) => {
   try {
     // 如果使用者ID 不等於此頁面用戶ID
     if (req.user.id.toString() !== req.body._id.toString()) {
-      if (req.body.type === 'delfans') {
-        // 移除粉絲程序
-        const user = await users.findById(req.user.id, 'follower')
-        const idx = user.followers.map(f => f.users).indexOf(req.body._id)
-        // 判斷是否是自己的粉絲
-        if (idx !== -1) {
-          await users.findByIdAndUpdate(
-            req.user.id,
-            {
-              $pull: {
-                followers: {
-                  users: req.body._id
-                }
+      // 當前使用者追蹤人與此頁面用戶的粉絲名單比對
+      const user = await users.findById(req.user.id, 'following')
+      const userFollow = await users.findById(req.body._id, 'followers')
+      const idx = user.following.map(f => f.users).toString().includes(req.body._id)
+      // 有找到->使用者取消追蹤&頁面者移除粉絲
+      if (idx === true) {
+        await users.findByIdAndUpdate(
+          req.user.id,
+          {
+            $pull: {
+              following: {
+                users: req.body._id
               }
             }
-          )
-          await users.findByIdAndUpdate(
-            req.body._id,
-            {
-              $pull: {
-                following: {
-                  users: req.user.id
-                }
+          }
+        )
+        await users.findByIdAndUpdate(
+          req.body._id,
+          {
+            $pull: {
+              followers: {
+                users: req.user.id
               }
             }
-          )
-          res.status(200).send({ success: true, message: '移除粉絲' })
-        }
+          }
+        )
+        res.status(200).send({ success: true, message: '取消追蹤' })
       } else {
-        // 正常追蹤程序
-        // 當前使用者追蹤人與此頁面用戶的粉絲名單比對
-        const user = await users.findById(req.user.id, 'following')
-        const userFollow = await users.findById(req.body._id, 'followers')
-        const idx = user.following.map(f => f.users).toString().includes(req.body._id)
-        // 有找到->使用者取消追蹤&移除粉絲
-        if (idx === true) {
-          await users.findByIdAndUpdate(
-            req.user.id,
-            {
-              $pull: {
-                following: {
-                  users: req.body._id
-                }
-              }
-            }
-          )
-          await users.findByIdAndUpdate(
-            req.body._id,
-            {
-              $pull: {
-                followers: {
-                  users: req.user.id
-                }
-              }
-            }
-          )
-          res.status(200).send({ success: true, message: '取消追蹤' })
-        } else {
-          // 尚未追蹤
-          // 沒找到->使用者加入追蹤名單&頁面用戶加入粉絲
-          user.following.push({ users: req.body._id })
-          userFollow.followers.push({ users: req.user.id })
-          user.save({ validateBeforeSave: false })
-          userFollow.save({ validateBeforeSave: false })
-          res.status(200).send({ success: true, message: '加入追蹤' })
-        }
+        // 尚未追蹤
+        // 沒找到->使用者加入追蹤名單&頁面用戶加入粉絲
+        user.following.push({ users: req.body._id })
+        userFollow.followers.push({ users: req.user.id })
+        user.save({ validateBeforeSave: false })
+        userFollow.save({ validateBeforeSave: false })
+        res.status(200).send({ success: true, message: '加入追蹤' })
       }
     }
   } catch (error) {
