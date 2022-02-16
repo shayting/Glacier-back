@@ -136,9 +136,10 @@ export const editUsers = async (req, res) => {
 }
 
 // 一般使用者取得他人資料
+// .populate(路徑,欄位)
 export const getUserById = async (req, res) => {
   try {
-    const result = await users.findById(req.params.id)
+    const result = await users.findById(req.params.id).populate('likes.tracks', 'title cover file artist')
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     console.log(error)

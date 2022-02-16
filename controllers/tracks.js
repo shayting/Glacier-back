@@ -162,7 +162,7 @@ export const postComment = async (req, res) => {
 
 export const getComment = async (req, res) => {
   try {
-    const comments = await tracks.findById(req.params.id, 'comments').populate('type')
+    const comments = await tracks.findById(req.params.id, 'comments').populate('users message date')
     res.status(200).send({ success: true, meesage: '留言成功', comments })
   } catch (error) {
     if (error.name === 'ValidationError') {

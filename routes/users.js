@@ -25,6 +25,7 @@ router.get('/:id', getUserById)
 router.get('/:id/tracks', getUserTracks)
 // 取得個別的user follow
 router.get('/:id/follow', getUserFollow)
+router.get('/:id/Myfollow', getUserFollow)
 // 使用者修改喜歡
 router.patch('/likes/:id', auth, content('application/json'), like)
 // 使用者改追蹤狀態
