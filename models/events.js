@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from 'mongoose'
+import mongoose from 'mongoose'
 
 const eventSchema = new mongoose.Schema({
   title: {
@@ -7,7 +7,7 @@ const eventSchema = new mongoose.Schema({
   },
   content: {
     type: String,
-    required: [true.valueOf, '缺少活動內容']
+    required: [true, '缺少活動內容']
   },
   cover: {
     type: String,
@@ -25,15 +25,9 @@ const eventSchema = new mongoose.Schema({
     type: String,
     required: [true, '缺少活動地點']
   },
-  // 儲存活動的使用者
-  save: {
-    type: [{
-      users: {
-        type: Mongoose.ObjectId,
-        ref: 'users',
-        required: [true, '缺少儲存者ID']
-      }
-    }]
+  price: {
+    type: String,
+    required: [true, '缺少活動票價']
   }
 }, { versionKey: false })
 

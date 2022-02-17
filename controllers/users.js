@@ -139,7 +139,12 @@ export const editUsers = async (req, res) => {
 // .populate(路徑,欄位)
 export const getUserById = async (req, res) => {
   try {
-    const result = await users.findById(req.params.id).populate('likes.tracks', 'title cover file artist')
+    const result = await users.findById(req.params.id).populate('likes.tracks', 'title cover file artist').populate({
+      path: 'likes.tracks',
+      populate: {
+        path: 'artist'
+      }
+    })
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     console.log(error)
