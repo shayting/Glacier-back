@@ -32,10 +32,11 @@ export const getAllEvents = async (req, res) => {
 export const updateEventById = async (req, res) => {
   const data = {
     title: req.body.title,
-    private: req.body.private,
-    type: req.body.type,
-    description: req.body.description,
-    lyric: req.body.lyric
+    performer: req.body.performer,
+    place: req.body.place,
+    price: req.body.price,
+    date: req.body.date,
+    content: req.body.content
   }
   console.log(req.files)
   // 如果沒傳檔案會回傳{} 還是會呈現 true 這樣判斷會錯誤，所以改成判斷是不是{}

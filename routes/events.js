@@ -16,6 +16,6 @@ const router = express.Router()
 router.post('/', auth, content('multipart/form-data'), upload, create)
 router.get('/all', getAllEvents)
 router.patch('/:id', auth, admin, content('multipart/form-data'), upload, updateEventById)
-router.delete('/:id', auth, deleteEvent)
+router.delete('/:id', auth, admin, deleteEvent)
 
 export default router
