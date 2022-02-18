@@ -5,6 +5,7 @@ import cors from 'cors'
 import usersRouter from './routes/users.js'
 import tracksRouter from './routes/tracks.js'
 import eventsRouter from './routes/events.js'
+import bannersRouter from './routes/banners.js'
 
 mongoose.connect(process.env.DB_URL, () => {
   console.log('MongoDB Connected')
@@ -36,6 +37,7 @@ app.use((_, req, res, next) => {
 app.use('/users', usersRouter)
 app.use('/tracks', tracksRouter)
 app.use('/events', eventsRouter)
+app.use('/banners', bannersRouter)
 
 app.all('*', (req, res) => {
   res.status(404).send({ success: false, message: '找不到' })
