@@ -14,12 +14,14 @@ import {
   deleteTrack,
   editTracks,
   getPrivate,
-  postComment
+  postComment,
+  getPublicTracks
 } from '../controllers/tracks.js'
 const router = express.Router()
 
 router.post('/', auth, content('multipart/form-data'), upload, create)
 router.get('/', getTracks)
+router.get('/public', getPublicTracks)
 router.get('/private/:id', auth, getPrivate)
 router.get('/all', auth, admin, getAllTracks)
 router.get('/:id', getTrackById)

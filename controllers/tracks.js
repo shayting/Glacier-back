@@ -1,4 +1,5 @@
 import tracks from '../models/tracks.js'
+// import users from '../models/users.js'
 export const create = async (req, res) => {
   try {
     const result = await tracks.create({
@@ -45,6 +46,16 @@ export const getPrivate = async (req, res) => {
 export const getAllTracks = async (req, res) => {
   try {
     const result = await tracks.find()
+    res.status(200).send({ success: true, message: '', result })
+  } catch (error) {
+    res.status(500).send({ success: false, message: '伺服器錯誤' })
+  }
+}
+
+// 一般使用者抓所有公開音樂
+export const getPublicTracks = async (req, res) => {
+  try {
+    const result = await tracks.find({ private: false }).populate('artist', 'account userName')
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     res.status(500).send({ success: false, message: '伺服器錯誤' })
