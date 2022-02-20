@@ -1,7 +1,7 @@
 import events from '../models/events.js'
 
 export const create = async (req, res) => {
-  console.log(req.files.cover[0].path)
+  // console.log(req.files)
   try {
     const result = await events.create({
       ...req.body,

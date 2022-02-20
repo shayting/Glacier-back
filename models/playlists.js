@@ -1,4 +1,4 @@
-import mongoose, { Mongoose } from 'mongoose'
+import mongoose from 'mongoose'
 
 const playlistSchema = new mongoose.Schema({
   title: {
@@ -9,29 +9,37 @@ const playlistSchema = new mongoose.Schema({
   description: {
     type: String
   },
-  cover: {
-    type: String,
-    required: [true, '缺少歌單封面']
-  },
   createDate: {
-    type: Date
+    type: Date,
+    default: Date.now
   },
   songs: {
     type: [{
       song: {
-        type: Mongoose.ObjectId,
+        type: mongoose.ObjectId,
         ref: 'tracks'
       }
     }]
   },
   owner: {
-    type: [{
-      user: {
-        type: mongoose.ObjectId,
-        ref: 'users',
-        required: [true, '缺少建立者ID']
-      }
-    }]
+    type: mongoose.ObjectId,
+    ref: 'users',
+    required: [true, '缺少創建者ID']
+  },
+  // type for admin
+  type: {
+    type: String,
+    enum: ['festival', 'vibe', 'normal'],
+    default: 'normal'
+  },
+  // 0 normal user
+  // 1 admin
+  role: {
+    type: Number,
+    default: 0
+  },
+  cover: {
+    type: String
   }
 }, { versionKey: false })
 

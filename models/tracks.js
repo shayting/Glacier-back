@@ -49,7 +49,6 @@ const trackSchema = new mongoose.Schema({
   },
   file: {
     type: String
-    // required: [true, '缺少音樂檔案']
   },
   comments: {
     type: [

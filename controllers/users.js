@@ -12,7 +12,7 @@ export const register = async (req, res) => {
       const key = Object.keys(error.errors)[0]
       res.status(400).send({ success: false, message: error.errors[key].message })
     } else if (error.name === 'MongoServerError' && error.code === 11000) {
-      res.status(400).send({ success: false, message: '帳號已存在' })
+      res.status(400).sen({ success: false, message: '帳號已存在' })
     } else {
       res.status(500).send({ success: false, message: '伺服器錯誤' })
     }

@@ -1,5 +1,4 @@
 import tracks from '../models/tracks.js'
-// import users from '../models/users.js'
 export const create = async (req, res) => {
   try {
     const result = await tracks.create({
