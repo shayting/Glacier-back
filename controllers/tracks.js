@@ -1,4 +1,5 @@
 import tracks from '../models/tracks.js'
+import users from '../models/users.js'
 export const create = async (req, res) => {
   try {
     const result = await tracks.create({
@@ -111,6 +112,14 @@ export const updateTrackById = async (req, res) => {
 export const deleteTrack = async (req, res) => {
   try {
     await tracks.findByIdAndDelete(req.params.id)
+    // 找到所有包含以下條件的使用者並從likes欄位刪除
+    await users.updateMany({}, {
+      $pull: {
+        likes: {
+          tracks: req.params.id
+        }
+      }
+    })
     res.status(200).send({ success: true, message: '' })
   } catch (error) {
     console.log(error)
