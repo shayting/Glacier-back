@@ -1,3 +1,4 @@
+import playlists from '../models/playlists.js'
 import tracks from '../models/tracks.js'
 import users from '../models/users.js'
 export const create = async (req, res) => {
@@ -25,7 +26,7 @@ export const create = async (req, res) => {
 // 未登入使用者抓指定人公開的
 export const getTracks = async (req, res) => {
   try {
-    const result = await tracks.find({ artist: req.query.artist, private: false })
+    const result = await tracks.find({ artist: req.query.artist, private: false }).populate('artist', 'account userName')
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     res.status(500).send({ success: false, message: '伺服器錯誤' })
@@ -35,7 +36,7 @@ export const getTracks = async (req, res) => {
 // 使用者取自己所有的音樂
 export const getPrivate = async (req, res) => {
   try {
-    const result = await tracks.find({ artist: req.user.id })
+    const result = await tracks.find({ artist: req.user.id }).populate('artist', 'account userName')
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     res.status(500).send({ success: false, message: '伺服器錯誤' })
@@ -117,6 +118,13 @@ export const deleteTrack = async (req, res) => {
       $pull: {
         likes: {
           tracks: req.params.id
+        }
+      }
+    })
+    await playlists.updateMany({}, {
+      $pull: {
+        songs: {
+          song: req.params.id
         }
       }
     })
