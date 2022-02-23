@@ -52,16 +52,6 @@ const userSchema = new mongoose.Schema({
       }
     }]
   },
-  // user儲存的活動
-  events: {
-    type: [{
-      event: {
-        type: mongoose.ObjectId,
-        ref: 'events',
-        required: [true, '缺少活動ID']
-      }
-    }]
-  },
   // user喜歡的音樂
   likes: {
     type: [{
