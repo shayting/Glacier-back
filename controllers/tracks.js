@@ -46,7 +46,7 @@ export const getPrivate = async (req, res) => {
 // 管理員取得所有音樂(包含不公開) 或個人的所有音樂
 export const getAllTracks = async (req, res) => {
   try {
-    const result = await tracks.find()
+    const result = await tracks.find().populate('artist', 'userName')
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     res.status(500).send({ success: false, message: '伺服器錯誤' })

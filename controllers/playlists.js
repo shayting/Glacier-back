@@ -141,7 +141,6 @@ export const addPlaylistSong = async (req, res) => {
   try {
     // 找到要加入的歌單的歌曲欄位
     const playlist = await playlists.findById(req.params.id)
-    console.log(playlist)
     playlist.songs.push({ song: req.body._id })
     playlist.save({ validateBeforeSave: false })
     res.status(200).send({ success: true, message: '成功加入歌單' })
