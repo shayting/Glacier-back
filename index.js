@@ -17,7 +17,7 @@ const app = express()
 // 允許跨域請求
 app.use(cors({
   origin (origin, callback) {
-    if (origin === undefined || origin.includes('github') || origin.includes('localhost')) {
+    if (origin === undefined || origin.includes('github') || origin.includes('localhost') || origin.includes('192.168')) {
       callback(null, true)
     } else {
       callback(new Error('Not allowed'), false)
