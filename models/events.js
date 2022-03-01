@@ -14,7 +14,7 @@ const eventSchema = new mongoose.Schema({
     required: [true, '缺少活動封面']
   },
   date: {
-    type: Date,
+    type: String,
     required: [true, '缺少活動日期']
   },
   performer: {

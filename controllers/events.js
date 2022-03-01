@@ -38,7 +38,6 @@ export const updateEventById = async (req, res) => {
     date: req.body.date,
     content: req.body.content
   }
-  console.log(req.files)
   // 如果沒傳檔案會回傳{} 還是會呈現 true 這樣判斷會錯誤，所以改成判斷是不是{}
   if (JSON.stringify(req.files) !== '{}') {
     data.cover = req.files.cover[0].path
@@ -48,7 +47,7 @@ export const updateEventById = async (req, res) => {
     res.status(200).send({ success: true, message: '', result })
   } catch (error) {
     if (error.name === 'CastError') {
-      res.status(404).send({ success: false, message: '找不到' })
+      res.status(404).send({ success: false, message: '找不到ID' })
     } else if (error.name === 'ValidationError') {
       const key = Object.keys(error.errors)[0]
       res.status(400).send({ success: false, message: error.errors[key].message })
